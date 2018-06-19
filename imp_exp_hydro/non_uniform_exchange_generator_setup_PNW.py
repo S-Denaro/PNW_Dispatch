@@ -49,7 +49,7 @@ for p in paths:
             
             sample = np.abs(v[d*24:d*24+24])
             
-            if np.sum(v[d*24:d*24+24]) > 0:      #if the sum in the 24 hours is positive (EXPORTS)
+            if np.sum(v[d*24:d*24+24]) > 0:      #if the sum in the 24 hours is positive (IMPORT)
                 
                 profile[d,:,y_index] = profile[d-1,:,y_index]  #the hourly profile is the same as the previous day
         
@@ -88,7 +88,7 @@ max_flow = np.zeros((days,num_paths,num_years))
 for p in paths:
     
     sheetname = p
-    df_data = pd.read_excel('OtherCA_Path_data.xlsx',sheetname=p,header=0)
+    df_data = pd.read_excel('PNW_Path_data.xlsx',sheetname=p,header=0)
 
     p_index = paths.index(p)
     
@@ -98,16 +98,16 @@ for p in paths:
     
         v = df_data.loc[:,y].values
         
-        if p=='Path42':
-            v = -v
-    
+        if p=='Path3' or p=='Path65' or p=='Path66':   #SCRIPT ASSUMPTION: NEGATIVE = EXPORT. revert sign when needed
+            v =-v
+            
         for d in range(0,days):
             
             sample = v[d*24:d*24+24]
+            min_flow[d,p_index,y_index] = np.min(sample)
             
             if all(i>0 for i in sample):
-                
-                min_flow[d,p_index,y_index] = np.min(sample)
+
                 max_flow[d,p_index,y_index] = np.max(sample)
                 
                 ramp = 0
@@ -132,7 +132,7 @@ for p in paths:
             
             if any(i<0 for i in sample):
                 
-                min_flow[d,p_index,y_index] = min_flow[d-1,p_index,y_index]
+                #min_flow[d,p_index,y_index] = min_flow[d-1,p_index,y_index]
                 max_flow[d,p_index,y_index] = max_flow[d-1,p_index,y_index]
                 upramps[d,p_index,y_index] = upramps[d-1,p_index,y_index]                   
                 downramps[d,p_index,y_index] = downramps[d-1,p_index,y_index]
