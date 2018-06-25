@@ -26,7 +26,6 @@ model = AbstractModel()
 ## string indentifiers for the set of generators in different zones. #
 ######################################################################
 #
-
 model.Zone5Gas = Set()
 model.Zone5Generators =  Set()
 #PNW
