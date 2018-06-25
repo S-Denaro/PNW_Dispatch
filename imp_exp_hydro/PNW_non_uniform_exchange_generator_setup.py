@@ -17,7 +17,8 @@ hours = 8760
 paths = ['Path3','Path8','Path14','Path65','Path66']
 num_paths = int(len(paths))
 
-   
+
+# calculate export profiles for each path
 for p in paths:
     
     profile = np.zeros((days,24,num_years))
@@ -70,7 +71,7 @@ for p in paths:
         if count > 0:
             avg_profile[d,:] = avg_profile[d,:]/count
 
-    filename = p + 'profiles.txt'
+    filename = p + 'export_profiles.txt'
     np.savetxt(filename,avg_profile)
     
     plt.figure()
@@ -79,7 +80,6 @@ for p in paths:
     
 
 # positive flow parameters
-    
 upramps = np.zeros((days,num_paths,num_years))
 downramps = np.zeros((days,num_paths,num_years))
 min_flow = np.zeros((days,num_paths,num_years))
@@ -136,6 +136,25 @@ for p in paths:
                 max_flow[d,p_index,y_index] = max_flow[d-1,p_index,y_index]
                 upramps[d,p_index,y_index] = upramps[d-1,p_index,y_index]                   
                 downramps[d,p_index,y_index] = downramps[d-1,p_index,y_index]
+        
+    #min flows for each path       
+    f = min_flow[:,p_index,:]
+    Path_min = np.min(f,axis=1)
+
+    #max flows for each path       
+    f = max_flow[:,p_index,:]
+    Path_max = np.max(f,axis=1)
+        
+    #add low pass filter
+    Path_min_filtered = np.zeros((365,1))
+
+    for i in range(15,350):
+        Path_min_filtered[i] = np.mean(Path_min[i-15:i+15])
+        Path_min_filtered[0:15] = Path_min_filtered[15]
+        Path_min_filtered[350:] = Path_min_filtered[349]
+    
+    filename = p + 'minflow.txt'
+    np.savetxt(filename,Path_min_filtered)
                 
 # plot
 for p in paths:
@@ -175,28 +194,7 @@ for p in paths:
         plt.plot(max_flow[:,p_index,y_index])
         plt.title(p + '_Maxflow')  
     
-#min flows for each path       
 
-f = min_flow[:,0,:]
-Path_min = np.min(f,axis=1)
-
-#max flows for each path       
-f = max_flow[:,0,:]
-Path_max = np.max(f,axis=1)
-
-
-#add low pass filter
-Path_min_filtered = np.zeros((365,1))
-
-for i in range(15,350):
-    Path_min_filtered[i] = np.mean(Path_min[i-15:i+15])
-    
-
-Path_min_filtered[0:15] = Path_min_filtered[15]
-Path_min_filtered[350:] = Path_min_filtered[349]
-
-
-np.savetxt('Path_minflow.txt',Path_min_filtered)
 
 #ramp rates
 Path_down = np.percentile(downramps[:,0,:],90)

@@ -125,9 +125,9 @@ PNW_min_filtered[0:15] = PNW_min_filtered[15]
 PNW_min_filtered[350:] = PNW_min_filtered[349]
 
 
-np.savetxt('PNW_minflow.txt',PNW_min_filtered)
-np.savetxt('PNW upramps.txt',upramps)
-np.savetxt('PNW downramps.txt',downramps)
+np.savetxt('PNW_hydro_minflow.txt',PNW_min_filtered)
+np.savetxt('PNW_hydro_upramps.txt',upramps)
+np.savetxt('PNW_hydro_downramps.txt',downramps)
 
     
 

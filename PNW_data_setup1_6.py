@@ -12,7 +12,7 @@ import numpy as np
 df_gen = pd.read_csv('generators.csv',header=0)
 
 #read transmission path parameters into DataFrame
-df_paths = pd.read_csv('paths.csv',header=0)
+#df_paths = pd.read_csv('paths.csv',header=0)
    
 ##time series of load for each zone
 df_load = pd.read_csv('load.csv',header=0)   
@@ -42,10 +42,10 @@ df_must = pd.read_csv('must_run.csv',header=0)
 df_ng = pd.read_csv('NG.csv', header=0)
 
 #california imports hourly minimum flows
-df_CA_import_mins = pd.read_csv('PNW_path_mins.csv', header=0)
+df_PNW_import_mins = pd.read_csv('PNW_path_mins.csv', header=0)
 
 #california hydro hourly minimum flows
-df_CA_hydro_mins = pd.read_csv('PNW_hydro_mins.csv', header=0)
+df_PNW_hydro_mins = pd.read_csv('PNW_hydro_mins.csv', header=0)
 
 #list zones
 zones = ['PNW']
