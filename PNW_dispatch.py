@@ -33,6 +33,7 @@ model.Zone5Generators =  Set()
 model.Coal = Set()
 model.Gas = model.Zone5Gas 
 model.Oil = Set()
+model.Nuclear = Set()
 model.PSH = Set()
 model.Slack = Set()
 model.Hydro = Set()
@@ -183,7 +184,8 @@ model.ini_on = Param(model.Generators, within=Binary, initialize=0,mutable=True)
 model.ini_mwh_1 = Param(model.Generators,initialize=0,mutable=True) #seg1
 model.ini_mwh_2 = Param(model.Generators,initialize=0,mutable=True) #seg2
 model.ini_mwh_3 = Param(model.Generators,initialize=0,mutable=True) #seg3
-
+model.ini_on["name"] = 1
+model.ini_mwh_1["name"] = 300
 ###########################################################
 ### Decision variables                                    #
 ###########################################################
@@ -226,7 +228,10 @@ model.PNWH_minflow = Var(model.HH_periods,within=NonNegativeReals)
 def SysCost(model):
     coal1 = sum(model.mwh_1[j,i]*(model.seg1[j]*2 + model.var_om[j]) for i in model.hh_periods for j in model.Coal) 
     coal2 = sum(model.mwh_2[j,i]*(model.seg2[j]*2 + model.var_om[j]) for i in model.hh_periods for j in model.Coal) 
-    coal3 = sum(model.mwh_3[j,i]*(model.seg3[j]*2 + model.var_om[j]) for i in model.hh_periods for j in model.Coal) 
+    coal3 = sum(model.mwh_3[j,i]*(model.seg3[j]*2 + model.var_om[j]) for i in model.hh_periods for j in model.Coal)
+    nuc1 = sum(model.mwh_1[j,i]*(model.seg1[j]*1 + model.var_om[j]) for i in model.hh_periods for j in model.Nuclear) 
+    nuc2 = sum(model.mwh_2[j,i]*(model.seg2[j]*1 + model.var_om[j]) for i in model.hh_periods for j in model.Nuclear) 
+    nuc3 = sum(model.mwh_3[j,i]*(model.seg3[j]*1 + model.var_om[j]) for i in model.hh_periods for j in model.Nuclear)
     gas1_5 = sum(model.mwh_1[j,i]*(model.seg1[j]*model.GasPrice['PNW'] + model.var_om[j]) for i in model.hh_periods for j in model.Zone5Gas) 
     gas2_5 = sum(model.mwh_2[j,i]*(model.seg2[j]*model.GasPrice['PNW'] + model.var_om[j]) for i in model.hh_periods for j in model.Zone5Gas)  
     gas3_5 = sum(model.mwh_3[j,i]*(model.seg3[j]*model.GasPrice['PNW'] + model.var_om[j]) for i in model.hh_periods for j in model.Zone5Gas)  
@@ -245,7 +250,7 @@ def SysCost(model):
     fixed_slack = sum(model.no_load[j]*model.on[j,i]*10000 for i in model.hh_periods for j in model.Slack)
     starts = sum(model.st_cost[j]*model.switch[j,i] for i in model.hh_periods for j in model.Generators) 
 
-    return fixed_slack + fixed_oil + fixed_gas5 + fixed_coal + coal1 + coal2 + coal3 + gas1_5 + gas2_5 + gas3_5 + oil1 + oil2 + oil3 + psh1 + psh2 + psh3 + slack1 + slack2 + slack3 + starts 
+    return fixed_slack + fixed_oil + fixed_gas5 + fixed_coal + coal1 + coal2 + coal3 + nuc1 + nuc2 + nuc3 + gas1_5 + gas2_5 + gas3_5 + oil1 + oil2 + oil3 + psh1 + psh2 + psh3 + slack1 + slack2 + slack3 + starts 
 model.SystemCost = Objective(rule=SysCost, sense=minimize)
     
    
@@ -469,6 +474,12 @@ def Ramp2(model,j,i):
     b = model.mwh_1[j,i-1] + model.mwh_2[j,i-1] + model.mwh_3[j,i-1]
     return b - a <= model.ramp[j] 
 model.RampCon2 = Constraint(model.Ramping,model.ramp2_periods,rule=Ramp2)
+
+#Nuclear constraint
+def NucOn(model,i):
+    return model.on["name",i] > 0
+model.NOn = Constraint(model.Generators,model.hh_periods,rule=NucOn)
+    
 
 
 
