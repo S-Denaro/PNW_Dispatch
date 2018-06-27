@@ -8,9 +8,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-df_data = pd.read_excel('Synthetic_Path_data.xlsx',header=0)
+df_data = pd.read_excel('Synthetic_Path_data.xlsx',sheetname='2010',header=0)
 
-# select dispatchable imports (positve flow days)
+# select dispatchable imports 
 imports = df_data
 paths = ['Path3','Path8','Path14','Path65','Path66']
 
@@ -18,7 +18,7 @@ for p in paths:
     for i in range(0,len(imports)):     
         
         if p=='Path3' or p=='Path65' or p=='Path66':   #SCRIPT ASSUMPTION: NEGATIVE = EXPORT. revert sign when needed
-            if imports.loc[i,p] > 0:
+            if imports.loc[i,p] >= 0:
                 imports.loc[i,p] = 0
             else:
                 imports.loc[i,p] = -imports.loc[i,p]
@@ -32,7 +32,7 @@ imports.to_csv('imports.csv')
 
 
 # convert to minimum flow time series and dispatchable (daily)
-df_mins = pd.read_excel('PNW_imports_minflow_profile.xlsx',header=0)
+df_mins = pd.read_excel('PNW_imports_minflow_profiles.xlsx',header=0)
 lines = ['Path3','Path8','Path14','Path65','Path66']
 
 for i in range(0,len(df_data)):
@@ -43,7 +43,7 @@ for i in range(0,len(df_data)):
             imports.loc[i,L] = 0
         
         else:
-            imports.loc[i,L] = imports.loc[i,L]-df_mins.loc[i,L]*24
+            imports.loc[i,L] = np.max((0,imports.loc[i,L]-df_mins.loc[i,L]*24))
 
 dispatchable_imports = imports
 dispatchable_imports.to_csv('dispatchable_imports.csv')
@@ -66,21 +66,21 @@ H.to_csv('PNW_path_mins.csv')
 
 # hourly exports
 df_data = pd.read_excel('Synthetic_Path_data.xlsx',header=0)
-e = np.zeros((8760,4))
+e = np.zeros((8760,5))
 
 for p in paths:
     
-    path_profiles = pd.read_excel('path_export_profiles.xlsx',sheetname=p,header=None)
+    path_profiles = pd.read_excel('PNW_Path_export_profiles.xlsx',sheetname=p,header=None)
     
     p_index = paths.index(p)
     pp = path_profiles.values
     
     if p=='Path3' or p=='Path65' or p=='Path66':   #SCRIPT ASSUMPTION: NEGATIVE = EXPORT. revert sign when needed
-            pp =-pp
+            df_data.loc[:,p]=-df_data.loc[:,p]
 
     for i in range(0,len(df_data)):
         if df_data.loc[i,p] < 0:
-            e[i*24:i*24+24,p_index] = pp[i,:]*df_data.loc[i,p]
+            e[i*24:i*24+24,p_index] = pp[i,:]*-df_data.loc[i,p]
 
 exports = pd.DataFrame(e) 
 exports.columns = ['Path3','Path8','Path14','Path65','Path66']
@@ -104,7 +104,7 @@ for i in range(0,len(hydro)):
             df_mins.loc[i] = hydro.loc[i]/24
             hydro.loc[i] = 0       
         else:
-            hydro.loc[i] = hydro.loc[i]-df_mins.loc[i]*24
+            hydro.loc[i] = np.max((0,hydro.loc[i]-df_mins.loc[i]*24))
 
 dispatchable_hydro = hydro
 dispatchable_hydro.to_csv('dispatchable_hydro.csv')
