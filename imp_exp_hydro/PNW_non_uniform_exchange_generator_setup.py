@@ -98,13 +98,13 @@ for p in paths:
     
         v = df_data.loc[:,y].values
         
-        if p=='Path3' or p=='Path65' or p=='Path66':   #SCRIPT ASSUMPTION: NEGATIVE = EXPORT. revert sign when needed
+        if p=='Path3' or p=='Path65' or p=='Path66':   #SCRIPT ASSUMPTION: POSITIVE = IMPORT. revert sign when needed
             v =-v
             
         for d in range(0,days):
             
             sample = v[d*24:d*24+24]
-            min_flow[d,p_index,y_index] = np.min(sample)
+            min_flow[d,p_index,y_index] = np.max((0,np.min(sample)))
             
             if all(i>0 for i in sample):
 
@@ -155,6 +155,14 @@ for p in paths:
     
     filename = p + 'minflow.txt'
     np.savetxt(filename,Path_min_filtered)
+    
+    #ramp rates
+    Path_down = np.percentile(downramps[:,0,:],90)
+    Path_up = np.percentile(upramps[:,0,:],90)    
+    #max capacity
+    Path_cap = np.max(Path_max)
+    filename = p + '_down_up_cap.txt'
+    np.savetxt(filename,np.c_[Path_down, Path_up, Path_cap])
                 
 # plot
 for p in paths:
@@ -196,11 +204,6 @@ for p in paths:
     
 
 
-#ramp rates
-Path_down = np.percentile(downramps[:,0,:],90)
-Path_up = np.percentile(upramps[:,0,:],90)
-    
-#max capacity
-Path_cap = np.max(Path_max)
+
 
 
