@@ -157,8 +157,8 @@ for p in paths:
     np.savetxt(filename,Path_min_filtered)
     
     #ramp rates
-    Path_down = np.percentile(downramps[:,0,:],90)
-    Path_up = np.percentile(upramps[:,0,:],90)    
+    Path_down = np.percentile(downramps[:,p_index,:],90)
+    Path_up = np.percentile(upramps[:,p_index,:],90)    
     #max capacity
     Path_cap = np.max(Path_max)
     filename = p + '_down_up_cap.txt'
