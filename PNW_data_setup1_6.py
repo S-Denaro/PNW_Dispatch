@@ -51,9 +51,9 @@ df_PNW_hydro_mins = pd.read_csv('PNW_hydro_mins.csv', header=0)
 zones = ['PNW']
 
 #list plant types
-types = ['ngct', 'ngcc', 'ngst', 'coal','oil', 'psh', 'slack', 'imports','hydro']
+types = ['ngct', 'ngcc', 'ngst', 'coal','oil', 'nuc','psh', 'slack', 'imports','hydro'] 
 
-# must run generation (including and diablo canyon (PGE))      
+# must run generation   
 must_run_PNW = np.ones((len(df_load),1))*(df_must.loc[0,'PNW'])  
         
 must_run = np.column_stack((must_run_PNW))
@@ -64,7 +64,7 @@ df_total_must_run =pd.DataFrame(must_run,columns=('PNW'))
 #  sets    #
 ############
 
-#write data.dat file
+#write data.dat file  ##need to add a NUCLEAR set??###
 filename = 'data.dat'
 with open(filename, 'w') as f:
     
@@ -101,7 +101,17 @@ with open(filename, 'w') as f:
             unit_name = df_gen.loc[gen,'name']
             unit_name = unit_name.replace(' ','_')
             f.write(unit_name + ' ')
-    f.write(';\n\n')    
+    f.write(';\n\n')  
+    
+    #nuc
+    f.write('set Nuclear :=\n')
+    # pull relevant generators
+    for gen in range(0,len(df_gen)):
+        if df_gen.loc[gen,'typ'] == 'nuc':
+            unit_name = df_gen.loc[gen,'name']
+            unit_name = unit_name.replace(' ','_')
+            f.write(unit_name + ' ')
+    f.write(';\n\n')
    
     # oil
     f.write('set Oil :=\n')
