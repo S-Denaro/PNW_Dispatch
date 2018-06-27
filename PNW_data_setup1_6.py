@@ -21,7 +21,7 @@ df_load = pd.read_csv('load.csv',header=0)
 df_reserves = pd.read_csv('reserves.csv',header=0)
 
 ##daily hydropower availability 
-df_hydro = pd.read_csv('dispatchable_hydro.csv',header=0)
+df_hydro = pd.read_csv('imp_exp_hydro/dispatchable_hydro.csv',header=0)
    
 ##time series of wind generation for each zone
 df_wind = pd.read_csv('wind.csv',header=0)
@@ -30,10 +30,10 @@ df_wind = pd.read_csv('wind.csv',header=0)
 df_solar = pd.read_csv('solar.csv',header=0)   
    
 ##daily time series of dispatchable imports by path
-df_imports = pd.read_csv('dispatchable_imports.csv',header=0)
+df_imports = pd.read_csv('imp_exp_hydro/dispatchable_imports.csv',header=0)
 
 ##hourly time series of exports by zone
-df_exports = pd.read_csv('exports.csv',header=0)
+df_exports = pd.read_csv('imp_exp_hydro/exports.csv',header=0)
      
 #must run resources (LFG,ag_waste,nuclear)
 df_must = pd.read_csv('must_run.csv',header=0)
@@ -42,10 +42,10 @@ df_must = pd.read_csv('must_run.csv',header=0)
 df_ng = pd.read_csv('NG.csv', header=0)
 
 #california imports hourly minimum flows
-df_PNW_import_mins = pd.read_csv('PNW_path_mins.csv', header=0)
+df_PNW_import_mins = pd.read_csv('imp_exp_hydro/PNW_path_mins.csv', header=0)
 
 #california hydro hourly minimum flows
-df_PNW_hydro_mins = pd.read_csv('PNW_hydro_mins.csv', header=0)
+df_PNW_hydro_mins = pd.read_csv('imp_exp_hydro/PNW_hydro_mins.csv', header=0)
 
 #list zones
 zones = ['PNW']
@@ -56,15 +56,16 @@ types = ['ngct', 'ngcc', 'ngst', 'coal','oil', 'nuc','psh', 'slack', 'imports','
 # must run generation   
 must_run_PNW = np.ones((len(df_load),1))*(df_must.loc[0,'PNW'])  
         
-must_run = np.column_stack((must_run_PNW))
-df_total_must_run =pd.DataFrame(must_run,columns=('PNW'))
+#must_run = np.column_stack((must_run_PNW))
+df_total_must_run =pd.DataFrame(must_run_PNW)
+df_total_must_run.columns = ['PNW']
 
         
 ############
 #  sets    #
 ############
 
-#write data.dat file  ##need to add a NUCLEAR set??###
+#write data.dat file  
 filename = 'data.dat'
 with open(filename, 'w') as f:
     
