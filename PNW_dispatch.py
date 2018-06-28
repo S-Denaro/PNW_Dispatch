@@ -184,8 +184,8 @@ model.ini_on = Param(model.Generators, within=Binary, initialize=0,mutable=True)
 model.ini_mwh_1 = Param(model.Generators,initialize=0,mutable=True) #seg1
 model.ini_mwh_2 = Param(model.Generators,initialize=0,mutable=True) #seg2
 model.ini_mwh_3 = Param(model.Generators,initialize=0,mutable=True) #seg3
-model.ini_on["name"] = 1
-model.ini_mwh_1["name"] = 300
+model.ini_on["COLUMBIA_2"] = 1
+model.ini_mwh_1["COLUMBIA_2"] = 300
 ###########################################################
 ### Decision variables                                    #
 ###########################################################
@@ -477,7 +477,7 @@ model.RampCon2 = Constraint(model.Ramping,model.ramp2_periods,rule=Ramp2)
 
 #Nuclear constraint
 def NucOn(model,i):
-    return model.on["name",i] > 0
+    return model.on["COLUMBIA_2",i] > 0
 model.NOn = Constraint(model.Generators,model.hh_periods,rule=NucOn)
     
 
