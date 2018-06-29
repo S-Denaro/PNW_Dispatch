@@ -106,7 +106,7 @@ for p in paths:
             sample = v[d*24:d*24+24]
             min_flow[d,p_index,y_index] = np.max((0,np.min(sample)))
             
-            if any(i>0 for i in sample):
+            if all(i>0 for i in sample):
 
                 max_flow[d,p_index,y_index] = np.max(sample)
                 
