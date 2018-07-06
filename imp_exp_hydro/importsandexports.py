@@ -20,8 +20,8 @@ Path_2010 = pd.read_excel('Path data.xlsx',sheetname='2010 Path')
 Path_2011 = pd.read_excel('Path data.xlsx',sheetname='2011 Path')
 
 #3 -- negative is import, pos is export
-path3_2010 = Path_2010['Path 3']
-path3_2011 = Path_2011['Path 3']
+path3_2010 = Path_2010['Path3']
+path3_2011 = Path_2011['Path3']
 
 path3_2010_im = np.zeros(len(path3_2010))
 path3_2010_exp = np.zeros(len(path3_2010))
@@ -43,8 +43,8 @@ for i in range(0,len(path3_2011)):
         
 
 #8 -- positive is import, neg is export
-path8_2010 = Path_2010['Path 8']
-path8_2011 = Path_2011['Path 8']
+path8_2010 = Path_2010['Path8']
+path8_2011 = Path_2011['Path8']
 
 path8_2010_im = np.zeros(len(path8_2010))
 path8_2010_exp = np.zeros(len(path8_2010))
@@ -66,8 +66,8 @@ for i in range(0,len(path8_2011)):
 
 
 #14 -- positive is import, neg is export
-path14_2010 = Path_2010['Path 14']
-path14_2011 = Path_2011['Path 14']
+path14_2010 = Path_2010['Path14']
+path14_2011 = Path_2011['Path14']
 
 path14_2010_im = np.zeros(len(path14_2010))
 path14_2010_exp = np.zeros(len(path14_2010))
@@ -90,8 +90,8 @@ for i in range(0,len(path14_2011)):
 
 
 #65 -- negative is import, pos is export
-path65_2010 = Path_2010['Path 65']
-path65_2011 = Path_2011['Path 65']
+path65_2010 = Path_2010['Path65']
+path65_2011 = Path_2011['Path65']
 
 path65_2010_im = np.zeros(len(path65_2010))
 path65_2010_exp = np.zeros(len(path65_2010))
@@ -113,8 +113,8 @@ for i in range(0,len(path65_2011)):
 
 
 #66 -- negative is import, pos is export
-path66_2010 = Path_2010['Path 66']
-path66_2011 = Path_2011['Path 66']
+path66_2010 = Path_2010['Path66']
+path66_2011 = Path_2011['Path66']
 
 path66_2010_im = np.zeros(len(path66_2010))
 path66_2010_exp = np.zeros(len(path66_2010))
@@ -138,8 +138,17 @@ for i in range(0,len(path66_2011)):
 imports_2010 = np.stack((path3_2010_im,path8_2010_im,path14_2010_im,path65_2010_im,path66_2010_im),axis=1)
 imports_2011 = np.stack((path3_2011_im,path8_2011_im,path14_2011_im,path65_2011_im,path66_2011_im),axis=1)
 
+imports_2010_total = np.sum(imports_2010,axis=1)
+
 #exports for each path stacked together, do we need to sum?
 exports_2010 = np.stack((path3_2010_exp,path8_2010_exp,path14_2010_exp,path65_2010_exp,path66_2010_exp),axis=1)
 exports_2011 = np.stack((path3_2011_exp,path8_2011_exp,path14_2011_exp,path65_2011_exp,path66_2011_exp),axis=1)
 
 
+exports_2010_total = np.sum(exports_2010,axis=1)
+
+imports10 = pd.DataFrame(imports_2010_total)
+exports10 = pd.DataFrame(exports_2010_total)
+writer = pd.ExcelWriter('Imports and Exports 2010.xlsx')
+imports10.to_excel(writer,'imports')
+exports10.to_excel(writer,'exports')

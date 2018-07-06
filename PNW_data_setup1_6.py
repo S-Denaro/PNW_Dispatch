@@ -73,7 +73,7 @@ with open(filename, 'w') as f:
     for z in zones:
         # zone string
         z_int = zones.index(z)
-        f.write('set Zone%dGenerators :=\n' % (z_int+1))
+        f.write('set Zone5Generators :=\n')
         # pull relevant generators
         for gen in range(0,len(df_gen)):
             if df_gen.loc[gen,'zone'] == z:
@@ -178,7 +178,7 @@ with open(filename, 'w') as f:
                 trigger = 1
         if trigger > 0:
             # pull relevant generators
-            f.write('set Zone%dGas :=\n' % (z_int+1))      
+            f.write('set Gas :=\n')      
             for gen in range(0,len(df_gen)):
                 if df_gen.loc[gen,'zone'] == z and (df_gen.loc[gen,'typ'] == 'ngcc' or df_gen.loc[gen,'typ'] == 'ngct' or df_gen.loc[gen,'typ'] == 'ngst'):
                     unit_name = df_gen.loc[gen,'name']
@@ -255,9 +255,9 @@ with open(filename, 'w') as f:
     
     
     #system wide (hourly)
-    f.write('param:' + '\t' + 'SimPath66_exports' + '\t' + 'SimPath65_exports' + '\t' + 'SimPath3_exports' + '\t' + 'SimPath8_exports' + '\t' + 'SimPath14_exports' + '\t' + 'SimReserves' + '\t' + 'SimPNW_hydro_minflow' + '\t' + 'SimPath3_imports_minflow' + '\t' + 'SimPath8_imports_minflow' + '\t' + 'SimPath14_imports_minflow:=' + '\n')
+    f.write('param:' + '\t' + 'SimPath66_exports' + '\t' + 'SimPath65_exports' + '\t' + 'SimPath3_exports' + '\t' + 'SimPath8_exports' + '\t' + 'SimPath14_exports' + '\t' + 'SimReserves' + '\t' + 'SimPNW_hydro_minflow' + '\t' + 'SimPath3_imports_minflow' + '\t' + 'SimPath8_imports_minflow' + '\t' + 'SimPath65_imports_minflow' + '\t' + 'SimPath66_imports_minflow' + '\t' + 'SimPath14_imports_minflow:=' + '\n')
     for h in range(0,len(df_load)):
-            f.write(str(h+1) + '\t' + str(df_exports.loc[h,'Path66']) + '\t' + str(df_exports.loc[h,'Path65']) + '\t' + str(df_exports.loc[h,'Path3']) + '\t' + str(df_exports.loc[h,'Path8']) + '\t' + str(df_exports.loc[h,'Path14']) + '\t' + str(df_reserves.loc[h,'reserves'])  + '\t' + str(df_PNW_hydro_mins.loc[h,'PNW']) + '\t' + str(df_PNW_import_mins.loc[h,'Path3']) + '\t' + str(df_PNW_import_mins.loc[h,'Path8']) + '\t' + str(df_PNW_import_mins.loc[h,'Path14']) + '\n')
+            f.write(str(h+1) + '\t' + str(df_exports.loc[h,'Path66']) + '\t' + str(df_exports.loc[h,'Path65']) + '\t' + str(df_exports.loc[h,'Path3']) + '\t' + str(df_exports.loc[h,'Path8']) + '\t' + str(df_exports.loc[h,'Path14']) + '\t' + str(df_reserves.loc[h,'reserves'])  + '\t' + str(df_PNW_hydro_mins.loc[h,'PNW']) + '\t' + str(df_PNW_import_mins.loc[h,'Path3']) + '\t' + str(df_PNW_import_mins.loc[h,'Path8']) + '\t' + str(df_PNW_import_mins.loc[h,'Path65']) + '\t' + str(df_PNW_import_mins.loc[h,'Path66']) + '\t' + str(df_PNW_import_mins.loc[h,'Path14']) + '\n')
     f.write(';\n\n')
     
     
