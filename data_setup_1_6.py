@@ -12,10 +12,7 @@ v_year = 2011
 
 #read generator parameters into DataFrame
 df_gen = pd.read_csv('generators.csv',header=0)
-
-#read transmission path parameters into DataFrame
-df_paths = pd.read_csv('paths.csv',header=0)
-   
+  
 ##time series of load for each zone
 df_load = pd.read_csv('load_%d.csv'% v_year,header=0)   
 
@@ -244,7 +241,7 @@ with open('data.dat', 'w') as f:
                 trigger = 1
         if trigger > 0:
             # pull relevant generators
-            f.write('set Zone%dGas :=\n' % (z_int+1))      
+            f.write('set Gas :=\n' % (z_int+1))      
             for gen in range(0,len(df_gen)):
                 if df_gen.loc[gen,'zone'] == z and (df_gen.loc[gen,'typ'] == 'ngcc' or df_gen.loc[gen,'typ'] == 'ngct' or df_gen.loc[gen,'typ'] == 'ngst'):
                     unit_name = df_gen.loc[gen,'name']
@@ -258,19 +255,7 @@ with open('data.dat', 'w') as f:
     for z in zones:
         f.write(z + ' ')
     f.write(';\n\n')
-    
-    # sources
-    f.write('set sources :=\n')
-    for z in zones:
-        f.write(z + ' ')
-    f.write(';\n\n')
-    
-    # sinks
-    f.write('set sinks :=\n')
-    for z in zones:
-        f.write(z + ' ')
-    f.write(';\n\n')
-    
+        
 ################
 #  parameters  #
 ################
