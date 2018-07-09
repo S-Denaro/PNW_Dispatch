@@ -263,7 +263,7 @@ def Zone5_Balance(model,i):
     s3 = sum(model.mwh_3[j,i] for j in model.Zone5Generators)  
     other = model.solar['PNW',i] + model.PNWH_minflow[i]\
     + model.wind['PNW',i] + model.HorizonMustRun['PNW',i]
-    imports =  model.PNWH_minflow[i] + model.P66I_minflow[i] + model.P65I_minflow[i] + model.P8I_minflow[i] + model.P14I_minflow[i] + model.P3I_minflow[i] + model.mwh_1['P66I',i] + model.mwh_2['P66I',i] + model.mwh_3['P66I',i] + model.mwh_1['P65I',i] + model.mwh_2['P65I',i] + model.mwh_3['P65I',i] + model.mwh_1['P3I',i] + model.mwh_2['P3I',i] + model.mwh_3['P3I',i] + model.mwh_1['P8I',i] + model.mwh_2['P8I',i] + model.mwh_3['P8I',i] + model.mwh_1['P14I',i] + model.mwh_2['P14I',i] + model.mwh_3['P14I',i] + model.mwh_1['PNWH',i] + model.mwh_2['PNWH',i] + model.mwh_3['PNWH',i]
+    imports =  model.P66I_minflow[i] + model.P65I_minflow[i] + model.P8I_minflow[i] + model.P14I_minflow[i] + model.P3I_minflow[i] + model.mwh_1['P66I',i] + model.mwh_2['P66I',i] + model.mwh_3['P66I',i] + model.mwh_1['P65I',i] + model.mwh_2['P65I',i] + model.mwh_3['P65I',i] + model.mwh_1['P3I',i] + model.mwh_2['P3I',i] + model.mwh_3['P3I',i] + model.mwh_1['P8I',i] + model.mwh_2['P8I',i] + model.mwh_3['P8I',i] + model.mwh_1['P14I',i] + model.mwh_2['P14I',i] + model.mwh_3['P14I',i] 
     exports =  model.HorizonPath66_exports[i] + model.HorizonPath65_exports[i] + model.HorizonPath8_exports[i] + model.HorizonPath3_exports[i] + model.HorizonPath14_exports[i]
     return s1 + s2 + s3 + other + imports - exports >= model.HorizonDemand['PNW',i]
 model.Bal5Constraint= Constraint(model.hh_periods,rule=Zone5_Balance)
