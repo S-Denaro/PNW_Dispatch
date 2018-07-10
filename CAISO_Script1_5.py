@@ -14,13 +14,13 @@ Created on Tue Jun 20 22:14:07 2017
 """
 
 from pyomo.opt import SolverFactory
-from CAISO1_7 import model
+from CAISO1_8 import model
 from pyomo.core import Var
 from pyomo.core import Param
 from operator import itemgetter
 import pandas as pd
 
-instance = model.create('data.dat')
+instance = model.create('CAISO_data.dat')
 
 opt = SolverFactory("cplex")
 H = instance.HorizonHours
@@ -43,7 +43,7 @@ flow=[]
 Generator=[]
 
 #max here can be (1,365)
-for day in range(1,365):
+for day in range(1,5):
      #load time series data
  for z in instance.zones:
         instance.GasPrice[z] = instance.SimGasPrice[z,day]

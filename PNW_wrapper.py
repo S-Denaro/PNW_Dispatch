@@ -47,7 +47,7 @@ instance.ini_on["COLUMBIA_2"] = 1
 instance.ini_mwh_1["COLUMBIA_2"] = 300
     
 #max here can be (1,365)
-for day in range(1,10):
+for day in range(1,5):
     
      #load time series data
     for z in instance.zones:
