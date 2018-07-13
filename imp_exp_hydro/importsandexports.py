@@ -139,6 +139,7 @@ imports_2010 = np.stack((path3_2010_im,path8_2010_im,path14_2010_im,path65_2010_
 imports_2011 = np.stack((path3_2011_im,path8_2011_im,path14_2011_im,path65_2011_im,path66_2011_im),axis=1)
 
 imports_2010_total = np.sum(imports_2010,axis=1)
+imports_2011_total = np.sum(imports_2011,axis=1)
 
 #exports for each path stacked together, do we need to sum?
 exports_2010 = np.stack((path3_2010_exp,path8_2010_exp,path14_2010_exp,path65_2010_exp,path66_2010_exp),axis=1)
@@ -146,9 +147,16 @@ exports_2011 = np.stack((path3_2011_exp,path8_2011_exp,path14_2011_exp,path65_20
 
 
 exports_2010_total = np.sum(exports_2010,axis=1)
+exports_2011_total = np.sum(exports_2011,axis=1)
 
 imports10 = pd.DataFrame(imports_2010_total)
 exports10 = pd.DataFrame(exports_2010_total)
 writer = pd.ExcelWriter('Imports and Exports 2010.xlsx')
 imports10.to_excel(writer,'imports')
 exports10.to_excel(writer,'exports')
+
+imports11 = pd.DataFrame(imports_2011_total)
+exports11 = pd.DataFrame(exports_2011_total)
+writer = pd.ExcelWriter('Imports and Exports 2011.xlsx')
+imports11.to_excel(writer,'imports')
+exports11.to_excel(writer,'exports')

@@ -8,6 +8,8 @@ Created on Wed May 03 15:01:31 2017
 import pandas as pd
 import numpy as np
 
+s_year=2011
+
 #read generator parameters into DataFrame
 df_gen = pd.read_csv('generators.csv',header=0)
 
@@ -15,37 +17,37 @@ df_gen = pd.read_csv('generators.csv',header=0)
 #df_paths = pd.read_csv('paths.csv',header=0)
    
 ##time series of load for each zone
-df_load = pd.read_csv('load.csv',header=0)   
+df_load = pd.read_csv('load_%d.csv'% s_year,header=0)   
 
 ##time series of operational reserves for each zone
-df_reserves = pd.read_csv('reserves.csv',header=0)
+df_reserves = pd.read_csv('reserves_%d.csv'% s_year,header=0)
 
 ##daily hydropower availability 
-df_hydro = pd.read_csv('imp_exp_hydro/dispatchable_hydro.csv',header=0)
+df_hydro = pd.read_csv('imp_exp_hydro/dispatchable_hydro_%d.csv'% s_year,header=0)
    
 ##time series of wind generation for each zone
-df_wind = pd.read_csv('wind.csv',header=0)
+df_wind = pd.read_csv('wind_%d.csv'% s_year,header=0)
    
 ##time series solar for each TAC
 df_solar = pd.read_csv('solar.csv',header=0)   
    
 ##daily time series of dispatchable imports by path
-df_imports = pd.read_csv('imp_exp_hydro/dispatchable_imports.csv',header=0)
+df_imports = pd.read_csv('imp_exp_hydro/dispatchable_imports_%d.csv'% s_year,header=0)
 
 ##hourly time series of exports by zone
-df_exports = pd.read_csv('imp_exp_hydro/exports.csv',header=0)
+df_exports = pd.read_csv('imp_exp_hydro/exports_%d.csv'% s_year,header=0)
      
 #must run resources (LFG,ag_waste,nuclear)
 df_must = pd.read_csv('must_run.csv',header=0)
 
 #natural gas prices
-df_ng = pd.read_csv('NG.csv', header=0)
+df_ng = pd.read_csv('NG_%d.csv'% s_year, header=0)
 
 #california imports hourly minimum flows
-df_PNW_import_mins = pd.read_csv('imp_exp_hydro/PNW_path_mins.csv', header=0)
+df_PNW_import_mins = pd.read_csv('imp_exp_hydro/PNW_path_mins_%d.csv'% s_year, header=0)
 
 #california hydro hourly minimum flows
-df_PNW_hydro_mins = pd.read_csv('imp_exp_hydro/PNW_hydro_mins.csv', header=0)
+df_PNW_hydro_mins = pd.read_csv('imp_exp_hydro/PNW_hydro_mins_%d.csv'% s_year, header=0)
 
 #list zones
 zones = ['PNW']
@@ -66,7 +68,7 @@ df_total_must_run.columns = ['PNW']
 ############
 
 #write data.dat file  
-filename = 'data.dat'
+filename = 'data_%d.dat'% s_year
 with open(filename, 'w') as f:
     
     # generator sets by zone

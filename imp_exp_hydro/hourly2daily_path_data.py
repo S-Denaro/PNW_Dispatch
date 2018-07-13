@@ -9,9 +9,10 @@ from __future__ import division
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from openpyxl import load_workbook
 
 
-years = [2010]
+years = [2011]
 num_years = int(len(years))
 days = 365
 paths = ['Path3','Path8','Path14','Path65','Path66']
@@ -32,4 +33,10 @@ for p in paths:
     
 paths_daily = pd.DataFrame(daily) 
 paths_daily.columns = paths
-paths_daily.to_csv('Synthetic_Path_data.csv')
+
+book = load_workbook('Synthetic_Path_data.xlsx')
+writer = pd.ExcelWriter('Synthetic_Path_data.xlsx', engine = 'openpyxl')
+writer.book = book
+paths_daily.to_excel(writer,sheet_name='2011')
+writer.save()
+writer.close()

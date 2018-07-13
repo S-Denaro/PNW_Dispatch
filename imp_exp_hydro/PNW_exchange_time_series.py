@@ -8,7 +8,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-df_data = pd.read_excel('Synthetic_Path_data.xlsx',sheetname='2010',header=0)
+s_year=2011
+
+df_data = pd.read_excel('Synthetic_Path_data.xlsx',sheetname=''% s_year,header=0)
 
 # select dispatchable imports 
 imports = df_data
@@ -28,7 +30,7 @@ for p in paths:
                 imports.loc[i,p] = 0
 
 imports.columns = ['Path3','Path8','Path14','Path65','Path66']
-imports.to_csv('imports.csv')
+imports.to_csv('imports_%d.csv'% s_year)
 
 
 # convert to minimum flow time series and dispatchable (daily)
@@ -46,10 +48,10 @@ for i in range(0,len(df_data)):
             imports.loc[i,L] = np.max((0,imports.loc[i,L]-df_mins.loc[i,L]*24))
 
 dispatchable_imports = imports
-dispatchable_imports.to_csv('dispatchable_imports.csv')
+dispatchable_imports.to_csv('dispatchable_imports_%d.csv'% s_year)
 
 
-df_data = pd.read_csv('imports.csv',header=0)
+df_data = pd.read_csv('imports_%d.csv'% s_year,header=0)
 
 # hourly minimum flow for paths
 hourly = np.zeros((8760,len(lines)))
@@ -62,10 +64,10 @@ for i in range(0,365):
         
 H = pd.DataFrame(hourly)
 H.columns = ['Path3','Path8','Path14','Path65','Path66']
-H.to_csv('PNW_path_mins.csv')
+H.to_csv('PNW_path_mins_%d.csv'% s_year)
 
 # hourly exports
-df_data = pd.read_excel('Synthetic_Path_data.xlsx',header=0)
+df_data = pd.read_excel('Synthetic_Path_data.xlsx',sheetname='%d'% s_year,header=0)
 e = np.zeros((8760,5))
 
 for p in paths:
@@ -84,7 +86,7 @@ for p in paths:
 
 exports = pd.DataFrame(e) 
 exports.columns = ['Path3','Path8','Path14','Path65','Path66']
-exports.to_csv('exports.csv')
+exports.to_csv('exports_%d.csv'% s_year)
 
 
 
@@ -95,27 +97,29 @@ exports.to_csv('exports.csv')
 
 # convert to minimum flow time series and dispatchable (daily)
 
-df_data = pd.read_excel('Synthetic_hydro_data.xlsx',header=0)
+df_data = pd.read_excel('Synthetic_hydro_data.xlsx',sheetname='%d'% s_year,header=0)
 hydro = df_data
 df_mins = pd.read_excel('PNW_hydro_minflow_profile.xlsx',header=0)
+df_mins.columns=['hydro']
+hydro.columns=['hydro']
 
 for i in range(0,len(hydro)):
-        if df_mins.loc[i]*24 >= hydro.loc[i]:
-            df_mins.loc[i] = hydro.loc[i]/24
+        if df_mins.loc[i].values*24 >= hydro.loc[i].values:
+            df_mins.loc[i].values = hydro.loc[i].values/24
             hydro.loc[i] = 0       
         else:
-            hydro.loc[i] = np.max((0,hydro.loc[i]-df_mins.loc[i]*24))
-
+            hydro.loc[i] = np.max((0,hydro.loc[i].values-df_mins.loc[i].values*24))
+            
 dispatchable_hydro = hydro
-dispatchable_hydro.to_csv('dispatchable_hydro.csv')
+dispatchable_hydro.to_csv('dispatchable_hydro_%d.csv'% s_year)
 
 # hourly minimum flow for hydro
-hourly = np.zeros(8760,1)
+hourly = np.zeros((8760,1))
 
-df_data = pd.read_excel('Synthetic_hydro_data.xlsx',header=0)
+df_data = pd.read_excel('Synthetic_hydro_data.xlsx',sheetname='%d'% s_year,header=0)
 
 for i in range(0,365):
         hourly[i*24:i*24+24] = np.min((df_mins.loc[i],df_data.loc[i]))
         
 H = pd.DataFrame(hourly)
-H.to_csv('PNW_hydro_mins.csv')
+H.to_csv('PNW_hydro_mins_%d.csv'% s_year)

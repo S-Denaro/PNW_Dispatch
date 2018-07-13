@@ -21,7 +21,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-instance = model.create_instance('data.dat')
+instance = model.create_instance('data_2011.dat')
 
 opt = SolverFactory("cplex")
 H = instance.HorizonHours
@@ -47,7 +47,7 @@ instance.ini_on["COLUMBIA_2"] = 1
 instance.ini_mwh_1["COLUMBIA_2"] = 300
     
 #max here can be (1,365)
-for day in range(1,5):
+for day in range(1,365):
     
      #load time series data
     for z in instance.zones:
@@ -317,15 +317,15 @@ for day in range(1,5):
 #    P66I_pd=pd.DataFrame(P66I,columns=('Time','Value'))
 #    P61I_pd=pd.DataFrame(P61I,columns=('Time','Value'))
     
-    mwh_1_pd.to_csv('mwh_1.csv')
-    mwh_2_pd.to_csv('mwh_2.csv')
-    mwh_3_pd.to_csv('mwh_3.csv')
-    on_pd.to_csv('on.csv')
-    switch_pd.to_csv('switch.csv')
-    srsv_pd.to_csv('srsv.csv')
-    nrsv_pd.to_csv('nrsv.csv')
-    solar_pd.to_csv('solar_out.csv')
-    wind_pd.to_csv('wind_out.csv')
+    mwh_1_pd.to_csv('2011_simulation/mwh_1.csv')
+    mwh_2_pd.to_csv('2011_simulation/mwh_2.csv')
+    mwh_3_pd.to_csv('2011_simulation/mwh_3.csv')
+    on_pd.to_csv('2011_simulation/on.csv')
+    switch_pd.to_csv('2011_simulation/switch.csv')
+    srsv_pd.to_csv('2011_simulation/srsv.csv')
+    nrsv_pd.to_csv('2011_simulation/nrsv.csv')
+    solar_pd.to_csv('2011_simulation/solar_out.csv')
+    wind_pd.to_csv('2011_simulation/wind_out.csv')
 #    PGEVH_pd.to_csv('PGEVH.csv')
 #    SCEH_pd.to_csv('SCEH.csv')
 #    P46I_pd.to_csv('P46I.csv')

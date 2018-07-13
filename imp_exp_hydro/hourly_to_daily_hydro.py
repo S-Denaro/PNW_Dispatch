@@ -9,9 +9,10 @@ from __future__ import division
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from openpyxl import load_workbook
 
 
-year = '2010'
+year = '2011'
 #num_years = int(len(years))
 days = 365
 
@@ -29,4 +30,12 @@ for d in range(0,days):   #for each day
     
 paths_daily = pd.DataFrame(daily) 
 paths_daily.columns = [year + ' hydro']
-paths_daily.to_excel('Synthetic_hydro_data.xlsx')
+
+
+book = load_workbook('Synthetic_hydro_data.xlsx')
+writer = pd.ExcelWriter('Synthetic_hydro_data.xlsx', engine = 'openpyxl')
+writer.book = book
+paths_daily.to_excel(writer,sheet_name='2011')
+writer.save()
+writer.close()
+
