@@ -5,22 +5,27 @@ Created on Wed May 03 15:01:31 2017
 @author: jdkern
 """
 
-import csv
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import pylab as py
 
 #==============================================================================
+s_year=2011
  
-df_mwh1 = pd.read_csv('2011_simulation/mwh_1.csv',header=0)
-df_mwh2 = pd.read_csv('2011_simulation/mwh_2.csv',header=0)
-df_mwh3 = pd.read_csv('2011_simulation/mwh_3.csv',header=0)
+df_mwh1 = pd.read_csv('%d_simulation/mwh_1.csv'%s_year,header=0)
+df_mwh2 = pd.read_csv('%d_simulation/mwh_2.csv'%s_year,header=0)
+df_mwh3 = pd.read_csv('%d_simulation/mwh_3.csv'%s_year,header=0)
 df_gen = pd.read_csv('generators.csv',header=0)
 oil_price = 20
 coal_price = 2
 #df_histprice = pd.read_excel('2011_historical_prices.xlsx',header=0)
-df_load = pd.read_csv('load_2011.csv',header=0)
-df_gasprice = pd.read_csv('NG_2011.csv',header=0)
+df_load = pd.read_csv('load_%d.csv'%s_year,header=0)
+df_gasprice = pd.read_csv('NG_%d.csv'%s_year,header=0)
+
+#BIAS
+#bias=0.89422
+#df_gasprice['PNW'] += bias
  
 mwh_1 = df_mwh1.values
 mwh_2 = df_mwh2.values
@@ -261,7 +266,7 @@ for i in range(0,8712):
 
 zonal_prices = zone5_price
 
-np.savetxt('2011_simulation/zonal_prices2011_min.csv',zonal_prices,delimiter = ',')
+np.savetxt('%d_simulation/zonal_prices%d_min.csv'%(s_year,s_year),zonal_prices,delimiter = ',')
 
 
 
